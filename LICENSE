@@ -1,0 +1,68 @@
+LICENCIA DE USO ACADÉMICO
+
+Sistema RENACER - Centro de Desarrollo Integral y Psicoterapia
+Copyright (c) 2026 Miguel Valencia Apaza
+
+Este software fue desarrollado como Proyecto de Grado para la
+Universidad UDABOL (Santa Cruz, Bolivia) en la materia Taller de
+Grado I, con el propósito específico de gestionar las operaciones
+del Centro Psicoterapéutico RENACER, dirigido por la Lic. Ana Luisa
+Apaza.
+
+PERMISOS OTORGADOS:
+
+Se permite a cualquier persona obtener una copia del código fuente
+publicado en este repositorio con los siguientes propósitos:
+
+1. Estudio académico personal
+2. Referencia educativa
+3. Aprendizaje de tecnologías relacionadas (ASP.NET Core, SQL Server,
+   metodología SCRUM, patrones MVC)
+4. Inspiración para proyectos académicos propios
+
+RESTRICCIONES:
+
+1. NO se permite el uso comercial de este software sin autorización
+   expresa y por escrito del autor y del Centro Psicoterapéutico
+   RENACER.
+
+2. NO se permite la redistribución del software como si fuera de
+   autoría propia (plagio académico).
+
+3. NO se permite el uso del nombre "RENACER", su logotipo o su
+   identidad visual sin autorización del Centro Psicoterapéutico
+   RENACER.
+
+4. NO se garantiza el funcionamiento del software para casos de uso
+   distintos al específico para el cual fue desarrollado.
+
+EXENCIÓN DE RESPONSABILIDAD:
+
+EL SOFTWARE SE PROPORCIONA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO,
+EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITÁNDOSE A LAS GARANTÍAS
+DE COMERCIABILIDAD, IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO
+INFRACCIÓN. EN NINGÚN CASO LOS AUTORES O TITULARES DEL COPYRIGHT
+SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑO U OTRA RESPONSABILIDAD,
+YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O DE OTRA MANERA, QUE SURJA
+DE, FUERA DE O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTROS TIPOS DE
+ACCIONES EN EL SOFTWARE.
+
+PROTECCIÓN DE DATOS:
+
+Este repositorio NO contiene datos reales de pacientes. Cualquier dato
+personal mostrado en capturas de pantalla, documentación o ejemplos
+es ficticio o ha sido anonimizado conforme a las normativas de
+protección de datos vigentes en Bolivia.
+
+CITACIÓN ACADÉMICA SUGERIDA:
+
+Si utilizas este proyecto como referencia académica, por favor cita:
+
+  Valencia Apaza, M. (2026). Sistema RENACER: Sistema web de gestión
+  para el Centro Psicoterapéutico RENACER [Proyecto de Grado].
+  Universidad UDABOL, Santa Cruz, Bolivia.
+
+---
+
+Para autorizaciones, consultas o colaboraciones académicas:
+Contacto a través del repositorio GitHub.

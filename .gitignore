@@ -1,0 +1,208 @@
+# ============================================================
+#  .gitignore - Sistema RENACER
+#  ASP.NET Core + Visual Studio 2022 + SQL Server
+# ============================================================
+
+# ────────────────────────────────────────────────────────────
+#  ARCHIVOS SENSIBLES (NUNCA versionar)
+# ────────────────────────────────────────────────────────────
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Local.json
+*.secrets.json
+secrets.json
+.env
+.env.*
+!.env.example
+
+# Connection strings sueltos
+**/ConnectionStrings.config
+**/connectionStrings.config
+
+# Certificados y claves
+*.pfx
+*.key
+*.pem
+*.crt
+
+# ────────────────────────────────────────────────────────────
+#  VISUAL STUDIO / VS CODE
+# ────────────────────────────────────────────────────────────
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Visual Studio cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ────────────────────────────────────────────────────────────
+#  .NET / ASP.NET CORE BUILD
+# ────────────────────────────────────────────────────────────
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]uild/
+[Bb]uilds/
+build/
+publish/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ASP.NET Core
+**/wwwroot/lib/
+**/wwwroot/dist/
+**/Properties/launchSettings.json
+PublishProfiles/
+*.pubxml
+*.publishproj
+
+# ────────────────────────────────────────────────────────────
+#  ENTITY FRAMEWORK
+# ────────────────────────────────────────────────────────────
+# Migraciones SÍ se versionan, pero NO los bin/obj generados
+**/Migrations/*.designer.cs.bak
+
+# ────────────────────────────────────────────────────────────
+#  TESTS Y COBERTURA
+# ────────────────────────────────────────────────────────────
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# ────────────────────────────────────────────────────────────
+#  SQL SERVER
+# ────────────────────────────────────────────────────────────
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.dacpac
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+
+# ────────────────────────────────────────────────────────────
+#  LOGS
+# ────────────────────────────────────────────────────────────
+*.log
+logs/
+*.Log
+Log*/
+*.tlog
+
+# ────────────────────────────────────────────────────────────
+#  SISTEMA OPERATIVO
+# ────────────────────────────────────────────────────────────
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ────────────────────────────────────────────────────────────
+#  TEMPORALES Y BACKUPS
+# ────────────────────────────────────────────────────────────
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.~lock.*
+*.orig
+*.rej
+
+# ────────────────────────────────────────────────────────────
+#  NODE / FRONTEND (por si usamos algún build de JS/CSS)
+# ────────────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json.bak
+
+# ────────────────────────────────────────────────────────────
+#  CLAUDE CODE / IA
+# ────────────────────────────────────────────────────────────
+.claude/
+.aider*
+.cursor/
+
+# ────────────────────────────────────────────────────────────
+#  ARCHIVOS DEL PROYECTO ACADÉMICO (NO subir el Word de tesis)
+# ────────────────────────────────────────────────────────────
+*.docx
+*.doc
+!docs/**/*.md
+~$*.docx
+~$*.doc
+
+# ────────────────────────────────────────────────────────────
+#  PERMITIDOS EXPLÍCITAMENTE
+# ────────────────────────────────────────────────────────────
+!.gitkeep
+!.gitignore
+!README.md
+!LICENSE
+!docs/BD/*.sql
