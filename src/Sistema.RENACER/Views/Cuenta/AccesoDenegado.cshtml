@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Acceso denegado";
+    Layout = "_Layout";
+}
+
+<div class="text-center py-5">
+    <i class="fas fa-ban fa-4x mb-3" style="color:var(--renacer-accent-red);"></i>
+    <h2 class="page-title">Acceso denegado</h2>
+    <p class="page-subtitle">No tienes permiso para acceder a esta sección.</p>
+    <a href="@Url.Action("Index","Home")" class="btn btn-primary">
+        <i class="fas fa-home me-2"></i>Volver al inicio
+    </a>
+</div>
