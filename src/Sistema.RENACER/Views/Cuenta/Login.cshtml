@@ -1,0 +1,97 @@
+@model Sistema.RENACER.ViewModels.Cuenta.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = "_LayoutLogin";
+}
+
+<div class="login-container">
+    <div class="login-logo">
+        <img src="~/img/logo.jpg" alt="Centro RENACER" />
+    </div>
+
+    <div class="login-card">
+        <h1 class="login-title">Bienvenido</h1>
+        <p class="login-subtitle">Sistema de Gestión RENACER</p>
+
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="login-success">
+                <i class="fas fa-check-circle me-2"></i>@TempData["Mensaje"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="login-error">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                @Html.ValidationSummary(false, "", new { @class = "mb-0" })
+            </div>
+        }
+
+        <form asp-action="Login" asp-controller="Cuenta" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+            <div class="mb-3">
+                <label asp-for="NombreUsuario" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input asp-for="NombreUsuario" class="form-control has-icon"
+                           placeholder="Ingrese su usuario" autocomplete="username" />
+                </div>
+                <span asp-validation-for="NombreUsuario" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input asp-for="Password" class="form-control has-icon"
+                           placeholder="Ingrese su contraseña" autocomplete="current-password"
+                           id="passwordInput" />
+                    <button class="btn btn-outline-secondary" type="button"
+                            onclick="togglePassword()" title="Mostrar/ocultar contraseña">
+                        <i class="fas fa-eye" id="eyeIcon"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4 d-flex align-items-center justify-content-between">
+                <div class="form-check">
+                    <input asp-for="Recordarme" class="form-check-input" />
+                    <label asp-for="Recordarme" class="form-check-label small">Recordarme</label>
+                </div>
+                <a href="@Url.Action("RecuperarPassword", "Cuenta")"
+                   class="small" style="color: var(--renacer-primary);">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+
+            <button type="submit" class="btn btn-login">
+                <i class="fas fa-sign-in-alt me-2"></i>Iniciar sesión
+            </button>
+        </form>
+    </div>
+
+    <div class="login-footer">
+        Sistema RENACER &copy; 2026 — Centro de Desarrollo Integral y Psicoterapia
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
+}

@@ -1,0 +1,87 @@
+@model IEnumerable<Sistema.RENACER.ViewModels.Usuarios.UsuarioListaViewModel>
+@{
+    ViewData["Title"] = "Usuarios";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="page-title"><i class="fas fa-user-cog me-2"></i>Gestión de Usuarios</h2>
+        <p class="page-subtitle">Administra las cuentas de acceso al sistema</p>
+    </div>
+    <a href="@Url.Action("Crear")" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Nuevo usuario
+    </a>
+</div>
+
+<div class="card-renacer">
+    <div class="card-body">
+        <table id="tablaUsuarios" class="table table-hover table-renacer w-100">
+            <thead>
+                <tr>
+                    <th>Nombre completo</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Último acceso</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.NombreCompleto</td>
+                        <td><code>@u.NombreUsuario</code></td>
+                        <td>@(u.Email ?? "—")</td>
+                        <td>@u.Rol</td>
+                        <td>
+                            <span class="@(u.Activo ? "badge-activo" : "badge-inactivo")">
+                                @(u.Activo ? "Activo" : "Inactivo")
+                            </span>
+                        </td>
+                        <td>@(u.UltimoAcceso?.ToString("dd/MM/yyyy HH:mm") ?? "Nunca")</td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <a href="@Url.Action("Detalle", new { id = u.IdUsuario })"
+                                   class="btn btn-sm btn-outline-primary" title="Ver detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="@Url.Action("Editar", new { id = u.IdUsuario })"
+                                   class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <form id="toggle-@u.IdUsuario" asp-action="ToggleActivo"
+                                      asp-route-id="@u.IdUsuario" method="post" style="display:inline;">
+                                    @Html.AntiForgeryToken()
+                                    <button type="button"
+                                            class="btn btn-sm @(u.Activo ? "btn-outline-danger" : "btn-outline-success")"
+                                            title="@(u.Activo ? "Desactivar" : "Activar")"
+                                            onclick="confirmarAccion('@(u.Activo ? "¿Desactivar" : "¿Activar") a @u.NombreCompleto?', 'toggle-@u.IdUsuario')">
+                                        <i class="fas @(u.Activo ? "fa-user-slash" : "fa-user-check")"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tablaUsuarios').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+                pageLength: 10,
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}

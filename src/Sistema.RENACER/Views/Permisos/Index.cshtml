@@ -1,0 +1,62 @@
+@model IEnumerable<Sistema.RENACER.ViewModels.Permisos.PermisoListaViewModel>
+@{
+    ViewData["Title"] = "Permisos";
+    Layout = "_Layout";
+    var categorias = Model.GroupBy(p => p.Categoria).OrderBy(g => g.Key);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="page-title"><i class="fas fa-key me-2"></i>Gestión de Permisos</h2>
+        <p class="page-subtitle">Define las acciones que puede realizar cada rol</p>
+    </div>
+    <a href="@Url.Action("Crear")" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Nuevo permiso
+    </a>
+</div>
+
+@foreach (var grupo in categorias)
+{
+    <div class="card-renacer mb-4">
+        <div class="card-header">
+            <i class="fas fa-folder me-2"></i>Categoría: @grupo.Key
+            <span class="float-end badge-permiso">@grupo.Count() permisos</span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-renacer mb-0">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Roles que lo usan</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in grupo.OrderBy(x => x.Codigo))
+                        {
+                            <tr>
+                                <td><span class="badge-permiso">@p.Codigo</span></td>
+                                <td>@p.Nombre</td>
+                                <td class="text-muted small">@(p.Descripcion ?? "—")</td>
+                                <td>
+                                    <span class="@(p.CantidadRoles > 0 ? "badge-activo" : "badge-inactivo")">
+                                        @p.CantidadRoles rol@(p.CantidadRoles != 1 ? "es" : "")
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("Editar", new { id = p.IdPermiso })"
+                                       class="btn btn-sm btn-outline-primary" title="Editar nombre/descripción">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,125 @@
+@using Sistema.RENACER.Helpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Sistema RENACER</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+    <link rel="stylesheet" href="~/lib/datatables/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <img src="~/img/logo.jpg" alt="RENACER" />
+        <span class="brand-name">RENACER</span>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-section-title">Módulos</div>
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")"
+           href="@Url.Action("Index","Home")">
+            <i class="fas fa-home"></i> Inicio
+        </a>
+        <a class="nav-link disabled-link" href="#" onclick="return false;"
+           title="Disponible en Sprint 2" data-bs-toggle="tooltip">
+            <i class="fas fa-users"></i> Pacientes
+            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S2</small>
+        </a>
+        <a class="nav-link disabled-link" href="#" onclick="return false;"
+           title="Disponible en Sprint 2" data-bs-toggle="tooltip">
+            <i class="fas fa-calendar-check"></i> Citas
+            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S2</small>
+        </a>
+        <a class="nav-link disabled-link" href="#" onclick="return false;"
+           title="Disponible en Sprint 3" data-bs-toggle="tooltip">
+            <i class="fas fa-dollar-sign"></i> Pagos
+            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S3</small>
+        </a>
+        <a class="nav-link disabled-link" href="#" onclick="return false;"
+           title="Disponible en Sprint 4" data-bs-toggle="tooltip">
+            <i class="fas fa-chart-bar"></i> Reportes
+            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S4</small>
+        </a>
+        @if (User.IsInRole("Administrador"))
+        {
+            <hr />
+            <div class="nav-section-title">Configuración</div>
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Usuarios" ? "active" : "")"
+               href="@Url.Action("Index","Usuarios")">
+                <i class="fas fa-user-cog"></i> Usuarios
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Roles" ? "active" : "")"
+               href="@Url.Action("Index","Roles")">
+                <i class="fas fa-shield-alt"></i> Roles
+            </a>
+            <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Permisos" ? "active" : "")"
+               href="@Url.Action("Index","Permisos")">
+                <i class="fas fa-key"></i> Permisos
+            </a>
+        }
+    </div>
+</nav>
+
+<div class="topbar">
+    <button class="topbar-toggle" id="sidebarToggle" type="button">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="topbar-breadcrumb">
+        @await Html.PartialAsync("_Breadcrumbs")
+    </div>
+    <div class="topbar-user dropdown">
+        <a href="#" class="dropdown-toggle text-decoration-none" data-bs-toggle="dropdown">
+            <div class="avatar">@(ClaimsHelper.GetNombreCompleto(User).FirstOrDefault().ToString().ToUpper())</div>
+            <span class="d-none d-md-inline ms-1">@ClaimsHelper.GetNombreCompleto(User)</span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+            <li><span class="dropdown-item-text text-muted" style="font-size:.8rem;">@ClaimsHelper.GetRol(User)</span></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+                <a class="dropdown-item" href="@Url.Action("CambiarPassword","Usuarios", new { id = ClaimsHelper.GetIdUsuario(User) })">
+                    <i class="fas fa-lock me-2"></i>Cambiar contraseña
+                </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+                <a class="dropdown-item text-danger" href="#" onclick="confirmarLogout();return false;">
+                    <i class="fas fa-sign-out-alt me-2"></i>Cerrar sesión
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<form id="logoutForm" asp-controller="Cuenta" asp-action="Logout" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>
+
+@if (TempData["Toast"] != null)
+{
+    <input type="hidden" id="toast-data" value="@TempData["Toast"]" />
+}
+
+<div class="main-content">
+    @RenderBody()
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/toastr/toastr.min.js"></script>
+<script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+<script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+<script src="~/lib/datatables/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script>
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+</script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
