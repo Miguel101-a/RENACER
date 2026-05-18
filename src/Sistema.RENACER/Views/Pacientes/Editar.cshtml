@@ -1,0 +1,99 @@
+@model Sistema.RENACER.ViewModels.Pacientes.PacienteFormViewModel
+@{
+    ViewData["Title"] = "Editar paciente";
+    Layout = "_Layout";
+}
+
+<div class="mb-3">
+    <h2 class="page-title"><i class="fas fa-user-edit me-2"></i>Editar paciente</h2>
+    <p class="page-subtitle">Modifique los datos del paciente</p>
+</div>
+
+<div class="card-renacer" style="max-width:900px;">
+    <div class="card-body p-4">
+        <form asp-action="Editar" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="IdPaciente" />
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+            <h6 class="text-uppercase text-muted small mb-3">Datos personales</h6>
+            <div class="row g-3 mb-2">
+                <div class="col-md-6">
+                    <label asp-for="Nombres" class="form-label"></label>
+                    <input asp-for="Nombres" class="form-control" />
+                    <span asp-validation-for="Nombres" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Apellidos" class="form-label"></label>
+                    <input asp-for="Apellidos" class="form-control" />
+                    <span asp-validation-for="Apellidos" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="FechaNacimiento" class="form-label"></label>
+                    <input asp-for="FechaNacimiento" class="form-control" type="date" />
+                    <span asp-validation-for="FechaNacimiento" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Genero" class="form-label"></label>
+                    <select asp-for="Genero" asp-items="Model.Generos" class="form-select"></select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="CI" class="form-label"></label>
+                    <input asp-for="CI" class="form-control" />
+                </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted small mb-3 mt-3">Contacto</h6>
+            <div class="row g-3 mb-2">
+                <div class="col-md-4">
+                    <label asp-for="Telefono" class="form-label"></label>
+                    <input asp-for="Telefono" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" type="email" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Direccion" class="form-label"></label>
+                    <input asp-for="Direccion" class="form-control" />
+                </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted small mb-3 mt-3">Tutor / Responsable</h6>
+            <div class="row g-3 mb-2">
+                <div class="col-md-4">
+                    <label asp-for="NombreTutor" class="form-label"></label>
+                    <input asp-for="NombreTutor" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="TelefonoTutor" class="form-label"></label>
+                    <input asp-for="TelefonoTutor" class="form-control" />
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="RelacionTutor" class="form-label"></label>
+                    <input asp-for="RelacionTutor" class="form-control" />
+                </div>
+            </div>
+
+            <h6 class="text-uppercase text-muted small mb-3 mt-3">Consulta</h6>
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="MotivoConsulta" class="form-label"></label>
+                    <textarea asp-for="MotivoConsulta" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Guardar cambios
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

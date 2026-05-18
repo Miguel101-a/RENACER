@@ -14,6 +14,14 @@ public class RenacerDbContext : DbContext
     public DbSet<UsuarioRol> UsuarioRoles { get; set; }
     public DbSet<Auditoria> Auditorias { get; set; }
 
+    // Sprint 2 — Pacientes y Agenda
+    public DbSet<Paciente> Pacientes { get; set; }
+    public DbSet<Cita> Citas { get; set; }
+    public DbSet<TipoCita> TiposCita { get; set; }
+    public DbSet<Servicio> Servicios { get; set; }
+    public DbSet<ProfesionalExterno> ProfesionalesExternos { get; set; }
+    public DbSet<ServicioRealizado> ServiciosRealizados { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

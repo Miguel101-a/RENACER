@@ -1,0 +1,125 @@
+@model IEnumerable<Sistema.RENACER.ViewModels.Pacientes.PacienteListaViewModel>
+@{
+    ViewData["Title"] = "Pacientes";
+    Layout = "_Layout";
+    var filtroEstado = ViewBag.FiltroEstado as string ?? "todos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="page-title"><i class="fas fa-users me-2"></i>Gestión de Pacientes</h2>
+        <p class="page-subtitle">Registro y consulta de pacientes del centro</p>
+    </div>
+    @if (ClaimsHelper.TienePermiso(User, "PAC_CREAR"))
+    {
+        <a href="@Url.Action("Crear")" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Nuevo paciente
+        </a>
+    }
+</div>
+
+<div class="card-renacer mb-3">
+    <div class="card-body py-2">
+        <form method="get" asp-action="Index" class="d-flex flex-wrap align-items-center gap-2">
+            <label class="form-label mb-0 me-2 text-muted small">Filtrar:</label>
+            <select name="estado" class="form-select form-select-sm" style="max-width:200px;"
+                    onchange="this.form.submit()">
+                <option value="todos"     selected="@(filtroEstado == "todos")">Todos</option>
+                <option value="activos"   selected="@(filtroEstado == "activos")">Solo activos</option>
+                <option value="inactivos" selected="@(filtroEstado == "inactivos")">Solo inactivos</option>
+            </select>
+        </form>
+    </div>
+</div>
+
+<div class="card-renacer">
+    <div class="card-body">
+        <table id="tablaPacientes" class="table table-hover table-renacer w-100">
+            <thead>
+                <tr>
+                    <th>Nombre completo</th>
+                    <th>CI / Documento</th>
+                    <th class="text-center">Edad</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th>Registrado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td><strong>@p.NombreCompleto</strong></td>
+                        <td>@(string.IsNullOrWhiteSpace(p.CI) ? "—" : p.CI)</td>
+                        <td class="text-center">@p.Edad</td>
+                        <td>@(p.Telefono ?? "—")</td>
+                        <td>
+                            <span class="@(p.Activo ? "badge-activo" : "badge-inactivo")">
+                                @(p.Activo ? "Activo" : "Inactivo")
+                            </span>
+                        </td>
+                        <td>@p.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <a href="@Url.Action("Detalle", new { id = p.IdPaciente })"
+                                   class="btn btn-sm btn-outline-primary" title="Ver detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                @if (ClaimsHelper.TienePermiso(User, "PAC_EDITAR"))
+                                {
+                                    <a href="@Url.Action("Editar", new { id = p.IdPaciente })"
+                                       class="btn btn-sm btn-outline-primary" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                }
+                                @if (ClaimsHelper.TienePermiso(User, "PAC_ELIMINAR"))
+                                {
+                                    <form id="tg-pac-@p.IdPaciente" asp-action="ToggleActivo"
+                                          asp-route-id="@p.IdPaciente" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <button type="button"
+                                                class="btn btn-sm @(p.Activo ? "btn-outline-danger" : "btn-outline-success")"
+                                                title="@(p.Activo ? "Desactivar" : "Activar")"
+                                                onclick="confirmarAccion('@(p.Activo ? "¿Desactivar" : "¿Activar") a @p.NombreCompleto?', 'tg-pac-@p.IdPaciente')">
+                                            <i class="fas @(p.Activo ? "fa-user-slash" : "fa-user-check")"></i>
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tablaPacientes').DataTable({
+                language: {
+                    decimal: ",",
+                    emptyTable: "No hay pacientes registrados",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                    infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                    infoFiltered: "(filtrado de _MAX_ registros totales)",
+                    lengthMenu: "Mostrar _MENU_ registros",
+                    loadingRecords: "Cargando...",
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    zeroRecords: "No se encontraron resultados",
+                    paginate: {
+                        first: "Primero",
+                        last:  "Último",
+                        next:  "Siguiente",
+                        previous: "Anterior"
+                    }
+                },
+                pageLength: 10,
+                order: [[0, 'asc']]
+            });
+        });
+    </script>
+}

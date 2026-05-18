@@ -42,6 +42,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Services.AddScoped<IPermisoRepository, PermisoRepository>();
+// Sprint 2
+builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
+builder.Services.AddScoped<ICitaRepository, CitaRepository>();
+builder.Services.AddScoped<ICatalogoRepository, CatalogoRepository>();
 
 // Services
 builder.Services.AddScoped<IAuditoriaService, AuditoriaService>();
@@ -50,6 +54,10 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IRolService, RolService>();
 builder.Services.AddScoped<IPermisoService, PermisoService>();
 builder.Services.AddScoped<IRecuperacionService, RecuperacionService>();
+// Sprint 2
+builder.Services.AddScoped<IPacienteService, PacienteService>();
+builder.Services.AddScoped<ICitaService, CitaService>();
+builder.Services.AddScoped<ICatalogoService, CatalogoService>();
 
 var app = builder.Build();
 

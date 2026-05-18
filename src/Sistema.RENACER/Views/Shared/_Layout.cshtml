@@ -27,15 +27,13 @@
            href="@Url.Action("Index","Home")">
             <i class="fas fa-home"></i> Inicio
         </a>
-        <a class="nav-link disabled-link" href="#" onclick="return false;"
-           title="Disponible en Sprint 2" data-bs-toggle="tooltip">
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Pacientes" ? "active" : "")"
+           href="@Url.Action("Index","Pacientes")">
             <i class="fas fa-users"></i> Pacientes
-            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S2</small>
         </a>
-        <a class="nav-link disabled-link" href="#" onclick="return false;"
-           title="Disponible en Sprint 2" data-bs-toggle="tooltip">
+        <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Citas" ? "active" : "")"
+           href="@Url.Action("Index","Citas")">
             <i class="fas fa-calendar-check"></i> Citas
-            <small class="ms-auto" style="font-size:.65rem;color:#F9A825;">S2</small>
         </a>
         <a class="nav-link disabled-link" href="#" onclick="return false;"
            title="Disponible en Sprint 3" data-bs-toggle="tooltip">
