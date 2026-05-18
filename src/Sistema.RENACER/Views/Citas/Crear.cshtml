@@ -1,0 +1,84 @@
+@model Sistema.RENACER.ViewModels.Citas.CitaFormViewModel
+@{
+    ViewData["Title"] = "Nueva cita";
+    Layout = "_Layout";
+}
+
+<div class="mb-3">
+    <h2 class="page-title"><i class="fas fa-calendar-plus me-2"></i>Nueva cita</h2>
+    <p class="page-subtitle">Agendar una cita para un paciente</p>
+</div>
+
+<div class="card-renacer" style="max-width:780px;">
+    <div class="card-body p-4">
+        <form asp-action="Crear" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label asp-for="IdPaciente" class="form-label"></label>
+                    <select asp-for="IdPaciente" asp-items="Model.Pacientes" class="form-select">
+                        <option value="">— Seleccione un paciente —</option>
+                    </select>
+                    <span asp-validation-for="IdPaciente" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Fecha" class="form-label"></label>
+                    <input asp-for="Fecha" class="form-control" type="date" />
+                    <span asp-validation-for="Fecha" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraInicio" class="form-label"></label>
+                    <input asp-for="HoraInicio" class="form-control" type="time" />
+                    <span asp-validation-for="HoraInicio" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="HoraFin" class="form-label"></label>
+                    <input asp-for="HoraFin" class="form-control" type="time" />
+                    <span asp-validation-for="HoraFin" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="IdTipoCita" class="form-label"></label>
+                    <select asp-for="IdTipoCita" asp-items="Model.TiposCita" class="form-select">
+                        <option value="">— Seleccione un tipo —</option>
+                    </select>
+                    <span asp-validation-for="IdTipoCita" class="text-danger small"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="IdServicio" class="form-label"></label>
+                    <select asp-for="IdServicio" asp-items="Model.Servicios" class="form-select">
+                        <option value="">— Seleccione un servicio —</option>
+                    </select>
+                    <span asp-validation-for="IdServicio" class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="IdProfesional" class="form-label"></label>
+                    <select asp-for="IdProfesional" asp-items="Model.Profesionales" class="form-select">
+                        <option value="">— Responsable del centro —</option>
+                    </select>
+                    <small class="text-muted">Si no asigna, la cita queda a cargo del responsable del centro.</small>
+                </div>
+
+                <div class="col-md-12">
+                    <label asp-for="Observaciones" class="form-label"></label>
+                    <textarea asp-for="Observaciones" class="form-control" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Agendar cita
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts { @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); } }

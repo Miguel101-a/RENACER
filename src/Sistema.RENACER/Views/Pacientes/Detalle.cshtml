@@ -1,0 +1,83 @@
+@model Sistema.RENACER.ViewModels.Pacientes.PacienteDetalleViewModel
+@{
+    ViewData["Title"] = "Detalle del paciente";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="page-title"><i class="fas fa-user me-2"></i>Detalle del paciente</h2>
+        <p class="page-subtitle">Información completa del paciente</p>
+    </div>
+    <span class="@(Model.Activo ? "badge-activo" : "badge-inactivo")">
+        @(Model.Activo ? "Activo" : "Inactivo")
+    </span>
+</div>
+
+<div class="card-renacer" style="max-width:900px;">
+    <div class="card-body p-4">
+        <h6 class="text-uppercase text-muted small mb-3">Datos personales</h6>
+        <dl class="row mb-2">
+            <dt class="col-sm-4">Nombre completo</dt>
+            <dd class="col-sm-8"><strong>@Model.NombreCompleto</strong></dd>
+
+            <dt class="col-sm-4">Fecha de nacimiento</dt>
+            <dd class="col-sm-8">@Model.FechaNacimiento.ToString("dd/MM/yyyy") (@Model.Edad años)</dd>
+
+            <dt class="col-sm-4">Género</dt>
+            <dd class="col-sm-8">@(Model.Genero ?? "—")</dd>
+
+            <dt class="col-sm-4">CI / Documento</dt>
+            <dd class="col-sm-8">@(Model.CI ?? "—")</dd>
+        </dl>
+
+        <h6 class="text-uppercase text-muted small mb-3 mt-3">Contacto</h6>
+        <dl class="row mb-2">
+            <dt class="col-sm-4">Teléfono</dt>
+            <dd class="col-sm-8">@(Model.Telefono ?? "—")</dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8">@(Model.Email ?? "—")</dd>
+
+            <dt class="col-sm-4">Dirección</dt>
+            <dd class="col-sm-8">@(Model.Direccion ?? "—")</dd>
+        </dl>
+
+        @if (!string.IsNullOrWhiteSpace(Model.NombreTutor) ||
+             !string.IsNullOrWhiteSpace(Model.TelefonoTutor))
+        {
+            <h6 class="text-uppercase text-muted small mb-3 mt-3">Tutor / Responsable</h6>
+            <dl class="row mb-2">
+                <dt class="col-sm-4">Nombre</dt>
+                <dd class="col-sm-8">@(Model.NombreTutor ?? "—")</dd>
+
+                <dt class="col-sm-4">Teléfono</dt>
+                <dd class="col-sm-8">@(Model.TelefonoTutor ?? "—")</dd>
+
+                <dt class="col-sm-4">Relación</dt>
+                <dd class="col-sm-8">@(Model.RelacionTutor ?? "—")</dd>
+            </dl>
+        }
+
+        <h6 class="text-uppercase text-muted small mb-3 mt-3">Consulta inicial</h6>
+        <dl class="row mb-2">
+            <dt class="col-sm-4">Motivo</dt>
+            <dd class="col-sm-8">@(Model.MotivoConsulta ?? "—")</dd>
+
+            <dt class="col-sm-4">Fecha de registro</dt>
+            <dd class="col-sm-8">@Model.FechaRegistro.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+
+        <div class="d-flex gap-2 mt-4">
+            @if (ClaimsHelper.TienePermiso(User, "PAC_EDITAR"))
+            {
+                <a href="@Url.Action("Editar", new { id = Model.IdPaciente })" class="btn btn-primary">
+                    <i class="fas fa-edit me-1"></i>Editar
+                </a>
+            }
+            <a href="@Url.Action("Index")" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i>Volver
+            </a>
+        </div>
+    </div>
+</div>

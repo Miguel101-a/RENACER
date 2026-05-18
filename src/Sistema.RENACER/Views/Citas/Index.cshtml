@@ -1,0 +1,167 @@
+@model IEnumerable<Sistema.RENACER.ViewModels.Citas.CitaListaViewModel>
+@{
+    ViewData["Title"] = "Citas";
+    Layout = "_Layout";
+    var filtroDesde  = ViewBag.FiltroDesde  as string;
+    var filtroHasta  = ViewBag.FiltroHasta  as string;
+    var filtroEstado = ViewBag.FiltroEstado as string;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="page-title"><i class="fas fa-calendar-check me-2"></i>Gestión de Citas</h2>
+        <p class="page-subtitle">Agenda y consulta de citas programadas</p>
+    </div>
+    @if (ClaimsHelper.TienePermiso(User, "CITA_CREAR"))
+    {
+        <a href="@Url.Action("Crear")" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>Nueva cita
+        </a>
+    }
+</div>
+
+<div class="card-renacer mb-3">
+    <div class="card-body py-3">
+        <form method="get" asp-action="Index" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small text-muted mb-1">Desde</label>
+                <input type="date" name="desde" value="@filtroDesde" class="form-control form-control-sm" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small text-muted mb-1">Hasta</label>
+                <input type="date" name="hasta" value="@filtroHasta" class="form-control form-control-sm" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small text-muted mb-1">Estado</label>
+                <select name="estado" class="form-select form-select-sm">
+                    <option value="">Todos</option>
+                    @foreach (var estado in Sistema.RENACER.Models.CitaEstado.Todos)
+                    {
+                        <option value="@estado" selected="@(filtroEstado == estado)">@estado</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3 d-flex gap-1">
+                <button type="submit" class="btn btn-sm btn-primary">
+                    <i class="fas fa-filter me-1"></i>Filtrar
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-times me-1"></i>Limpiar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card-renacer">
+    <div class="card-body">
+        <table id="tablaCitas" class="table table-hover table-renacer w-100">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Horario</th>
+                    <th>Tipo</th>
+                    <th>Profesional</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model)
+                {
+                    var fin = c.FechaHora.AddMinutes(c.DuracionMinutos);
+                    <tr>
+                        <td><strong>@c.Paciente</strong></td>
+                        <td>@c.FechaHora.ToString("dd/MM/yyyy")</td>
+                        <td>@c.FechaHora.ToString("HH:mm") - @fin.ToString("HH:mm")</td>
+                        <td>@c.TipoCita</td>
+                        <td>@c.Profesional</td>
+                        <td>
+                            @{
+                                var estadoClase = c.Estado switch
+                                {
+                                    "Programada" => "badge bg-info text-dark",
+                                    "Asistió"    => "badge-activo",
+                                    "No asistió" => "badge bg-warning text-dark",
+                                    "Cancelada"  => "badge-inactivo",
+                                    "Reagendada" => "badge bg-secondary",
+                                    _ => "badge bg-secondary"
+                                };
+                            }
+                            <span class="@estadoClase">@c.Estado</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1 flex-wrap">
+                                <a href="@Url.Action("Detalle", new { id = c.IdCita })"
+                                   class="btn btn-sm btn-outline-primary" title="Ver detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                @if (c.Estado == "Programada")
+                                {
+                                    if (ClaimsHelper.TienePermiso(User, "CITA_EDITAR"))
+                                    {
+                                        <form id="atender-@c.IdCita" asp-action="CambiarEstado"
+                                              method="post" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.IdCita" />
+                                            <input type="hidden" name="nuevoEstado" value="Asistió" />
+                                            <button type="button" class="btn btn-sm btn-outline-success"
+                                                    title="Marcar como atendida"
+                                                    onclick="confirmarAccion('¿Marcar la cita de @c.Paciente como atendida?', 'atender-@c.IdCita')">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    if (ClaimsHelper.TienePermiso(User, "CITA_CANCELAR"))
+                                    {
+                                        <form id="cancelar-@c.IdCita" asp-action="CambiarEstado"
+                                              method="post" style="display:inline;">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="id" value="@c.IdCita" />
+                                            <input type="hidden" name="nuevoEstado" value="Cancelada" />
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    title="Cancelar cita"
+                                                    onclick="confirmarAccion('¿Cancelar la cita de @c.Paciente?', 'cancelar-@c.IdCita')">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#tablaCitas').DataTable({
+                language: {
+                    decimal: ",",
+                    emptyTable: "No hay citas programadas",
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ citas",
+                    infoEmpty: "Mostrando 0 a 0 de 0 citas",
+                    infoFiltered: "(filtrado de _MAX_ citas totales)",
+                    lengthMenu: "Mostrar _MENU_ citas",
+                    loadingRecords: "Cargando...",
+                    processing: "Procesando...",
+                    search: "Buscar:",
+                    zeroRecords: "No se encontraron resultados",
+                    paginate: {
+                        first: "Primero",
+                        last:  "Último",
+                        next:  "Siguiente",
+                        previous: "Anterior"
+                    }
+                },
+                pageLength: 10,
+                order: [[1, 'asc']]
+            });
+        });
+    </script>
+}
